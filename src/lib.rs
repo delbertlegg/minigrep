@@ -13,7 +13,7 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() != 3 {
+        if args.len() < 3 {
             return Err(indoc!("
                 Not enough arguments...correct format is:
                     cargo run <query> <filename>"
@@ -37,7 +37,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 #[cfg(test)]
 
 #[test]
-fn test_parse_args() {
+fn test_new_config_happy() {
     let args = [String::from("throw away"), String::from("first"), String::from("second")];
     match Config::new(&args) {
         Ok(c) => {
@@ -46,4 +46,18 @@ fn test_parse_args() {
         },
         Err(e) => panic!(e)
     };
+}
+
+#[test]
+fn test_run_happy() {
+    let config : Config = Config { query : String::from("hi"), filename : String::from("poem.txt")};
+    let result : () = run(config).unwrap();
+    assert_eq!(result, ());
+}
+
+#[test]
+#[should_panic]
+fn test_run_fail() {
+    let config : Config = Config { query : String::from("hi"), filename : String::from("notthere.txt")};
+    run(config).unwrap();
 }
