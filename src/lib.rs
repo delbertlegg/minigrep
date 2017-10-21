@@ -39,13 +39,16 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 #[test]
 fn test_new_config_happy() {
     let args = [String::from("throw away"), String::from("first"), String::from("second")];
-    match Config::new(&args) {
-        Ok(c) => {
-            assert_eq!(c.query, "first");
-            assert_eq!(c.filename, "second");
-        },
-        Err(e) => panic!(e)
-    };
+    let result = Config::new(&args).unwrap();
+    assert_eq!(result.query, "first");
+    assert_eq!(result.filename, "second");
+}
+
+#[test]
+fn test_new_config_fail() {
+    let args = [String::from("first"), String::from("second")];
+    let result = Config::new(&args);
+    assert!(result.is_err());
 }
 
 #[test]
