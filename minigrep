@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+currDir="$PWD"
+fileName="$currDir/$2"
+cd $HOME/code/rust/projects/minigrep/
+cargo run -q $1 $fileName
